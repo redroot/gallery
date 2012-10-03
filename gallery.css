@@ -1,0 +1,97 @@
+/*
+  Gallery specific
+*/
+
+.fmg-gallery, .fmg-viewport, .fmg-captions, .fmg-thumbs {
+  width: 100%;
+  overflow: hidden;
+  display: block;
+}
+
+.fmg-slide, .fmg-caption {
+  display: block;
+  float: left;
+}
+
+.fmg-gallery {
+  background: #fff;
+}
+
+.fmg-gallery-tablet .fmg-viewport,
+.fmg-gallery-tablet .fmg-slide img {
+  height: 400px;
+}
+
+.fmg-gallery-mobile .fmg-viewport,
+.fmg-gallery-mobile .fmg-slide img {
+  height: 250px;
+}
+
+.fmg-viewport {
+  background: #eee;
+  height: 550px;
+}
+
+.fmg-slide {
+  overflow: hidden;
+  text-align: center;
+}
+
+.fmg-slide img {
+  height: 550px;
+}
+
+.fmg-captions {
+  background: #ccc;
+  height: 60px;
+}
+
+.fmg-caption {
+  height: 60px;
+}
+
+.fmg-thumbs {
+  background: #aaa; 
+  height: 140px;
+}
+  
+  .fmg-thumbs img {
+    margin: 0px;
+    padding: 0px;
+    cursor: pointer;
+  }
+
+  .fmg-thumbs-slide {
+    width: 8000px;
+  }
+
+
+/*
+General + additional
+*/
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 10px 0px;
+  text-align: center;
+}
+.wrapper {
+  text-align: left;
+  margin: 0 auto;
+  width: 960px;
+  background: #f0f0f0;
+}
+
+@media screen and (max-width: 959px) and (min-width: 768px){
+  .wrapper {
+    width: 768px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .wrapper {
+    width: auto;
+  }
+}
