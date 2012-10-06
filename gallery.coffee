@@ -5,7 +5,7 @@ class Gallery
     captions:     true
     meta:         true
     breakpoints:  
-      tablet: 960
+      tablet: 940
       mobile: 768
 
   constructor: (id, config={}) ->
@@ -30,7 +30,6 @@ class Gallery
       false
     # bind keypress event
     $(document).keydown (e) =>
-      console.log(e)
       if e.keyCode == 37 then @slide_to(@current - 1)
       if e.keyCode == 39 then @slide_to(@current + 1)
     # bind resize event
@@ -41,7 +40,7 @@ class Gallery
     console.log("sliding to " + pos + " of " + @count)
     if pos > @count or pos < 1 then return false
     slide_offset = -1 * @gallery_width() * (pos - 1)
-    thumb_offset = -1 * @calc_thumb_offset(pos)
+    thumb_offset = @calc_thumb_offset(pos)
 
     @slide_wrappers().each (i,e) -> $(e).css("left","#{slide_offset}px")
     @thumb_wrapper().css("left","#{thumb_offset}px") if SETTINGS.thumbs
@@ -82,14 +81,15 @@ class Gallery
     @wrapper.width()  
     
   calc_thumb_offset: (pos) -> 
-    max_slides = Math.ceil((SETTINGS.thumb_width * @count)/@gallery_width())
-    counter = 1
-    while counter <= max_slides
-      start = (@count/max_slides) * (counter - 1)
-      end = (@count/max_slides) * counter
-      if pos > start and pos <= end then break
-      counter++
-    @gallery_width() * (counter - 1)
+    per_slide = current = 1
+    per_slide++ while (per_slide + 1) * SETTINGS.thumb_width <= @gallery_width()
+    while current < Math.ceil(@count / per_slide)
+      start = ((current - 1) * per_slide) + 1 
+      end = current * per_slide
+      if pos >= start and pos <= end then break
+      current++
+    offset = SETTINGS.thumb_width * ((current - 1) * per_slide) * -1
+    offset
     
   set_current_elements: ->
     c = @current - 1 
@@ -113,22 +113,25 @@ class Gallery
   trigger: (event,args) ->
     (cb(args) for cb in @events[event]) if @events[event]
   
-  
-
 new Gallery("#gallery_one")
 
 # TODO ----------------
-# get basic styles in and content in - DONE 
-# basic slide transition for one width - DONE
-# distance to slide based on width of article - DONE
-# resize images based on width
-# basic slider transition for all widths - DONE
 # thumb slides correctly based on thumb should be viewable or on the left most if it doesnt fit on current slide
-# all things slide at once - DONE
+# resize images based on width
 # only load images are they appear
 # different images for desktop and mobile
 # full screen
-# DONE - resize listener
+# bind to touch start on mobile
+# add swipe gesture
 # ability to hide captions
 # ability to hide thumbs
+# Audio slot in caption
 # photo meta
+
+# DONE ---- 
+# get basic styles in and content in - DONE 
+# basic slide transition for one width - DONE
+# distance to slide based on width of article - DONE
+# basic slider transition for all widths - DONE
+# all things slide at once - DONE
+# DONE - resize listener

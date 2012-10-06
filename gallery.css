@@ -116,6 +116,11 @@
     margin: 0px;
     padding: 0px;
     cursor: pointer;
+    opacity: 0.5;
+  }
+  
+  .fmg-thumbs img.is-current {
+    opacity: 1;
   }
 
   .fmg-thumbs-slide {
@@ -140,6 +145,12 @@ body {
   margin: 0 auto;
   width: 960px;
   background: #f0f0f0;
+}
+
+.fmg-caption {
+  background: #222;
+  color: #fff;
+  padding: 8px;
 }
 
 @media screen and (max-width: 959px) and (min-width: 768px){

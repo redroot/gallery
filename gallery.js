@@ -9,7 +9,7 @@
       captions: true,
       meta: true,
       breakpoints: {
-        tablet: 960,
+        tablet: 940,
         mobile: 768
       }
     };
@@ -41,7 +41,6 @@
         return false;
       }, this));
       $(document).keydown(__bind(function(e) {
-        console.log(e);
         if (e.keyCode === 37) {
           this.slide_to(this.current - 1);
         }
@@ -60,7 +59,7 @@
         return false;
       }
       slide_offset = -1 * this.gallery_width() * (pos - 1);
-      thumb_offset = -1 * this.calc_thumb_offset(pos);
+      thumb_offset = this.calc_thumb_offset(pos);
       this.slide_wrappers().each(function(i, e) {
         return $(e).css("left", "" + slide_offset + "px");
       });
@@ -113,18 +112,21 @@
       return this.wrapper.width();
     };
     Gallery.prototype.calc_thumb_offset = function(pos) {
-      var counter, end, max_slides, start;
-      max_slides = Math.ceil((SETTINGS.thumb_width * this.count) / this.gallery_width());
-      counter = 1;
-      while (counter <= max_slides) {
-        start = (this.count / max_slides) * (counter - 1);
-        end = (this.count / max_slides) * counter;
-        if (pos > start && pos <= end) {
+      var current, end, offset, per_slide, start;
+      per_slide = current = 1;
+      while ((per_slide + 1) * SETTINGS.thumb_width <= this.gallery_width()) {
+        per_slide++;
+      }
+      while (current < Math.ceil(this.count / per_slide)) {
+        start = ((current - 1) * per_slide) + 1;
+        end = current * per_slide;
+        if (pos >= start && pos <= end) {
           break;
         }
-        counter++;
+        current++;
       }
-      return this.gallery_width() * (counter - 1);
+      offset = SETTINGS.thumb_width * ((current - 1) * per_slide) * -1;
+      return offset;
     };
     Gallery.prototype.set_current_elements = function() {
       var c;
