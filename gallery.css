@@ -89,13 +89,21 @@
 .fmg-viewport-nav-left  { left: 0px; }
 .fmg-viewport-nav-right { right: 0px; }
 
+.fmg-slides-wrapper {
+  display: table;
+}
+
 .fmg-slide {
   overflow: hidden;
   text-align: center;
+  display: table-cell;
+  vertical-align: middle;
 }
-
 .fmg-slide img {
-  height: 550px;
+  max-height: 550px;
+  max-width: 100%;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .fmg-captions {
@@ -117,6 +125,8 @@
     padding: 0px;
     cursor: pointer;
     opacity: 0.5;
+    display: inline;
+    float: left;
   }
   
   .fmg-thumbs img.is-current {

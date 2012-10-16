@@ -7,6 +7,10 @@ class Gallery
     breakpoints:  
       tablet: 940
       mobile: 768
+    heights:
+      desktop: 550
+      tablet: 400
+      mobile: 250
 
   constructor: (id, config={}) ->
     @wrapper     = $(id)
@@ -28,6 +32,8 @@ class Gallery
     $(document).on "click", ".fmg-viewport-nav-right", => 
       @slide_to(@current + 1)
       false
+    # bind swipe event (hammer.js)
+
     # bind keypress event
     $(document).keydown (e) =>
       if e.keyCode == 37 then @slide_to(@current - 1)
@@ -35,21 +41,19 @@ class Gallery
     # bind resize event
     window.onresize = => @resize()
     
-    
   slide_to: (pos) ->
-    console.log("sliding to " + pos + " of " + @count)
+    console.log("sliding to #{pos} of #{@count}")
     if pos > @count or pos < 1 then return false
-    slide_offset = -1 * @gallery_width() * (pos - 1)
-    thumb_offset = @calc_thumb_offset(pos)
-
-    @slide_wrappers().each (i,e) -> $(e).css("left","#{slide_offset}px")
-    @thumb_wrapper().css("left","#{thumb_offset}px") if SETTINGS.thumbs
     @current = pos
+    slide_offset = -1 * @gallery_width() * (@current - 1)
+    thumb_offset = @calc_thumb_offset()
+    @load_slide_image()
     @set_current_elements()
     @set_navigation_hidden()
-    window.location.hash = if pos == 1 then "" else "#slide-#{pos}"
-    console.log(slide_offset + " " + thumb_offset)
-    
+    @offset_slide_image()
+    @slide_wrappers().each (i,e) -> $(e).css("left","#{slide_offset}px")
+    @thumb_wrapper().css("left","#{thumb_offset}px") if SETTINGS.thumbs
+    window.location.hash = "#slide-#{@current}"
   
   resize: ->
     width = @gallery_width()
@@ -71,25 +75,51 @@ class Gallery
     @slide_wrappers().each (i,e) => $(e).width(width * @count)      
     @thumb_wrapper().width(Math.ceil(SETTINGS.thumb_width * @count)) if SETTINGS.thumbs
     @slide_to(@current)
-    
-  
-  loading: (state) ->
-    if state  then @wrapper.addClass("is-loading")
-    if !state then @wrapper.removeClass("is-loading")
 
   gallery_width: ->
     @wrapper.width()  
     
-  calc_thumb_offset: (pos) -> 
+  calc_thumb_offset: -> 
     per_slide = current = 1
     per_slide++ while (per_slide + 1) * SETTINGS.thumb_width <= @gallery_width()
-    while current < Math.ceil(@count / per_slide)
+    while current <= Math.ceil(@count / per_slide)
       start = ((current - 1) * per_slide) + 1 
       end = current * per_slide
-      if pos >= start and pos <= end then break
+      if @current >= start and @current <= end then break
       current++
     offset = SETTINGS.thumb_width * ((current - 1) * per_slide) * -1
+    @load_thumb_images(start,end)
     offset
+    
+  offset_slide_image: ->
+    viewport_height = @wrapper.find(".fmg-viewport").height()
+    image = @wrapper.find(".fmg-slide:eq(#{@current-1}) img")
+    h = image.data("height")
+    w = image.data("width")
+    scale = @gallery_width() / w
+    scaled_image_height = Math.round(scale * h)
+    console.log(viewport_height, scaled_image_height)
+    if scaled_image_height < viewport_height
+      diff = viewport_height - scaled_image_height
+      image.css("margin-top",diff/2)
+      image.css("height", scaled_image_height)
+    
+    
+  
+  load_slide_image: ->
+    image = @wrapper.find(".fmg-slide:eq(#{@current-1}) img")
+    src = if @gallery_width() < SETTINGS.breakpoints.mobile then "src-mobile" else "src"
+    if image.data("loaded-#{src}") then return
+    image.attr("src",image.data(src))
+    image.data("loaded-#{src}",true)
+  
+  load_thumb_images: (start,end) ->
+    @wrapper.find(".fmg-thumbs img").each (i,e) =>
+      i++ # match up to start/end indexing
+      image = $(e)
+      if i >= start and i <= (end + 1) and !image.data("loaded")
+        image.attr("src",image.data("src"))
+        image.data("loaded", true)
     
   set_current_elements: ->
     c = @current - 1 
@@ -105,6 +135,10 @@ class Gallery
     if(window.location.hash == "" || window.location.hash.indexOf("#slide-") == -1) then return 1
     parseInt(window.location.hash.split("#slide-",2)[1]) || 1;
   
+  loading: (state) ->
+    if state  then @wrapper.addClass("is-loading")
+    if !state then @wrapper.removeClass("is-loading")
+  
   add_listener: (event,fn) ->
     @events or= []
     @events[event] = [] unless @events[event]
@@ -116,10 +150,7 @@ class Gallery
 new Gallery("#gallery_one")
 
 # TODO ----------------
-# thumb slides correctly based on thumb should be viewable or on the left most if it doesnt fit on current slide
 # resize images based on width
-# only load images are they appear
-# different images for desktop and mobile
 # full screen
 # bind to touch start on mobile
 # add swipe gesture
@@ -129,6 +160,8 @@ new Gallery("#gallery_one")
 # photo meta
 
 # DONE ---- 
+# only load images are they appear - DONE
+# different images for desktop and mobile - DONE
 # get basic styles in and content in - DONE 
 # basic slide transition for one width - DONE
 # distance to slide based on width of article - DONE

@@ -11,6 +11,11 @@
       breakpoints: {
         tablet: 940,
         mobile: 768
+      },
+      heights: {
+        desktop: 550,
+        tablet: 400,
+        mobile: 250
       }
     };
     function Gallery(id, config) {
@@ -58,19 +63,20 @@
       if (pos > this.count || pos < 1) {
         return false;
       }
-      slide_offset = -1 * this.gallery_width() * (pos - 1);
-      thumb_offset = this.calc_thumb_offset(pos);
+      this.current = pos;
+      slide_offset = -1 * this.gallery_width() * (this.current - 1);
+      thumb_offset = this.calc_thumb_offset();
+      this.load_slide_image();
+      this.set_current_elements();
+      this.set_navigation_hidden();
+      this.offset_slide_image();
       this.slide_wrappers().each(function(i, e) {
         return $(e).css("left", "" + slide_offset + "px");
       });
       if (SETTINGS.thumbs) {
         this.thumb_wrapper().css("left", "" + thumb_offset + "px");
       }
-      this.current = pos;
-      this.set_current_elements();
-      this.set_navigation_hidden();
-      window.location.hash = pos === 1 ? "" : "#slide-" + pos;
-      return console.log(slide_offset + " " + thumb_offset);
+      return window.location.hash = "#slide-" + this.current;
     };
     Gallery.prototype.resize = function() {
       var width;
@@ -100,33 +106,62 @@
       }
       return this.slide_to(this.current);
     };
-    Gallery.prototype.loading = function(state) {
-      if (state) {
-        this.wrapper.addClass("is-loading");
-      }
-      if (!state) {
-        return this.wrapper.removeClass("is-loading");
-      }
-    };
     Gallery.prototype.gallery_width = function() {
       return this.wrapper.width();
     };
-    Gallery.prototype.calc_thumb_offset = function(pos) {
+    Gallery.prototype.calc_thumb_offset = function() {
       var current, end, offset, per_slide, start;
       per_slide = current = 1;
       while ((per_slide + 1) * SETTINGS.thumb_width <= this.gallery_width()) {
         per_slide++;
       }
-      while (current < Math.ceil(this.count / per_slide)) {
+      while (current <= Math.ceil(this.count / per_slide)) {
         start = ((current - 1) * per_slide) + 1;
         end = current * per_slide;
-        if (pos >= start && pos <= end) {
+        if (this.current >= start && this.current <= end) {
           break;
         }
         current++;
       }
       offset = SETTINGS.thumb_width * ((current - 1) * per_slide) * -1;
+      this.load_thumb_images(start, end);
       return offset;
+    };
+    Gallery.prototype.offset_slide_image = function() {
+      var diff, h, image, scale, scaled_image_height, viewport_height, w;
+      viewport_height = this.wrapper.find(".fmg-viewport").height();
+      image = this.wrapper.find(".fmg-slide:eq(" + (this.current - 1) + ") img");
+      h = image.data("height");
+      w = image.data("width");
+      scale = this.gallery_width() / w;
+      scaled_image_height = Math.round(scale * h);
+      console.log(viewport_height, scaled_image_height);
+      if (scaled_image_height < viewport_height) {
+        diff = viewport_height - scaled_image_height;
+        image.css("margin-top", diff / 2);
+        return image.css("height", scaled_image_height);
+      }
+    };
+    Gallery.prototype.load_slide_image = function() {
+      var image, src;
+      image = this.wrapper.find(".fmg-slide:eq(" + (this.current - 1) + ") img");
+      src = this.gallery_width() < SETTINGS.breakpoints.mobile ? "src-mobile" : "src";
+      if (image.data("loaded-" + src)) {
+        return;
+      }
+      image.attr("src", image.data(src));
+      return image.data("loaded-" + src, true);
+    };
+    Gallery.prototype.load_thumb_images = function(start, end) {
+      return this.wrapper.find(".fmg-thumbs img").each(__bind(function(i, e) {
+        var image;
+        i++;
+        image = $(e);
+        if (i >= start && i <= (end + 1) && !image.data("loaded")) {
+          image.attr("src", image.data("src"));
+          return image.data("loaded", true);
+        }
+      }, this));
     };
     Gallery.prototype.set_current_elements = function() {
       var c;
@@ -148,6 +183,14 @@
         return 1;
       }
       return parseInt(window.location.hash.split("#slide-", 2)[1]) || 1;
+    };
+    Gallery.prototype.loading = function(state) {
+      if (state) {
+        this.wrapper.addClass("is-loading");
+      }
+      if (!state) {
+        return this.wrapper.removeClass("is-loading");
+      }
     };
     Gallery.prototype.add_listener = function(event, fn) {
       this.events || (this.events = []);
