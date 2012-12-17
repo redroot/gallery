@@ -59,10 +59,42 @@
   height: 250px;
 }
 
+.fm-gallery-fullscreen .fmg-viewport {
+  height: 60%;
+}
+
+.fmg-gallery-fullscreen {
+  height: 100%;
+  width: 100%;
+}
+
+.fmg-gallery-fullscreen .fmg-viewport {
+  height: 90%;
+}
+
+.fmg-gallery-fullscreen .fmg-thumbs {
+  height: 10%;
+}
+
+.fmg-gallery-fullscreen .fmg-slide img {
+  height: 100%;
+  width: auto;
+}
+
 .fmg-viewport {
   background: #eee;
   height: 550px;
   position: relative;
+}
+
+.fmg-fullscreen {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 5px;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  z-index: 10;
 }
 
 .fmg-viewport-nav {
