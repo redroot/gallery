@@ -59,6 +59,10 @@
         this.toggle_fullscreen();
         return false;
       }, this));
+      $(document).on("click", ".fmg-toggle-thumbs", __bind(function() {
+        this.wrapper.find(".fmg-thumbs").toggleClass("is-hidden");
+        return false;
+      }, this));
       $(document).keydown(__bind(function(e) {
         if (e.keyCode === 37) {
           this.slide_to(this.current - 1);

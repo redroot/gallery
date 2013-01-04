@@ -42,7 +42,7 @@
   bottom: 0;
 }
 
-.fmg-gallery.is-resizing * {
+.fmg-gallery.is-resizing div {
   -webkit-transition: none;
   -moz-transition: none;
   -o-transition: color 0 ease-in;
@@ -59,9 +59,7 @@
   height: 250px;
 }
 
-.fm-gallery-fullscreen .fmg-viewport {
-  height: 60%;
-}
+/* Fullscreen mode */
 
 .fmg-gallery-fullscreen {
   height: 100%;
@@ -69,15 +67,24 @@
 }
 
 .fmg-gallery-fullscreen .fmg-viewport {
-  height: 90%;
+  height: 100%;
+}
+
+.fmg-gallery-fullscreen .fmg-captions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .fmg-gallery-fullscreen .fmg-thumbs {
-  height: 10%;
+  position: relative;
+  bottom: -140px;
+  display: none;
 }
 
 .fmg-gallery-fullscreen .fmg-slide img {
-  height: 100%;
+
   width: auto;
 }
 
@@ -87,15 +94,35 @@
   position: relative;
 }
 
-.fmg-fullscreen {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  padding: 5px;
+.fmg-menu-link {
+  background: #333;
   background: rgba(0,0,0,0.5);
   color: #fff;
   z-index: 10;
+  padding: 5px;
+  position: absolute;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-n-out;
 }
+
+.fmg-menu-link:hover {
+  background: #000;
+  background: rgba(0,0,0,1);
+}
+
+.fmg-fullscreen {
+  bottom: 5px;
+  right: 5px;
+}
+
+.fmg-toggle-thumbs {
+ bottom: 5px; 
+ right: 95px; 
+}
+
+.fmg-no-thumbs .fmg-toggle-thumbs { display: none; }
 
 .fmg-viewport-nav {
   position: absolute;
@@ -149,16 +176,26 @@
 
 .fmg-thumbs {
   background: #aaa; 
-  height: 140px;
+  height: 140px;  
+  -webkit-transition: height 0.4s ease-in-out;
+  -moz-transition: height 0.4s ease-in-out;
+  -o-transition: height 0.4s ease-in-out;
+  transition: height 0.4s ease-n-out;
 }
+
+.fmg-thumbs.is-hidden { height: 0px; }
   
   .fmg-thumbs img {
     margin: 0px;
     padding: 0px;
     cursor: pointer;
-    opacity: 0.5;
+    opacity: 0.4;
     display: inline;
     float: left;
+  }
+  
+  .fmg-thumbs img:hover {
+    opacity: 0.6;
   }
   
   .fmg-thumbs img.is-current {

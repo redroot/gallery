@@ -44,6 +44,11 @@ class Gallery
     $(document).on "click", ".fmg-fullscreen", =>
       @toggle_fullscreen()
       false
+      
+    # bind thumbs toggle
+    $(document).on "click", ".fmg-toggle-thumbs", =>
+      @wrapper.find(".fmg-thumbs").toggleClass("is-hidden")
+      false
     
     # bind swipe event (hammer.js)
 
@@ -86,6 +91,7 @@ class Gallery
     @slide_wrappers().each (i,e) => $(e).width(width * @count)      
     @thumb_wrapper().width(Math.ceil(SETTINGS.thumb_width * @count)) if SETTINGS.thumbs
     @slide_to(@current)
+      
 
   toggle_fullscreen: ->
     @full_screen_enabled ?= false
