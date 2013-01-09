@@ -122,6 +122,12 @@
  right: 95px; 
 }
 
+.fmg-toggle-captions {
+  bottom: 5px;
+  right: 170px;
+}
+
+.fmg-no-captions .fmg-toggle-captions { display: none; }
 .fmg-no-thumbs .fmg-toggle-thumbs { display: none; }
 
 .fmg-viewport-nav {
@@ -167,12 +173,45 @@
 
 .fmg-captions {
   background: #ccc;
-  height: 60px;
+  height: 50px;
+  -webkit-transition: height 0.4s ease-in-out;
+  -moz-transition: height 0.4s ease-in-out;
+  -o-transition: height 0.4s ease-in-out;
+  transition: height 0.4s ease-n-out;
 }
 
+.fmg-captions.is-hidden { height: 0px !important; }
+
 .fmg-caption {
-  height: 60px;
+  float: left;
 }
+
+.fmg-caption-content {
+  background: #222;
+  color: #fff;
+  padding: 10px 50px 10px 8px;
+  zoom: 1;
+  position: relative;
+}
+
+.fmg-caption-audio {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 8px;
+  color: #000;
+  margin-left: 10px;
+  background: #ff0;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  -webkit-transition: width 0.4s ease-in-out;
+  -moz-transition: width 0.4s ease-in-out;
+  -o-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-n-out;
+}
+
+.fmg-caption-audio:hover { width: 100px; }
 
 .fmg-thumbs {
   background: #aaa; 
@@ -217,6 +256,7 @@ General + additional
 body {
   padding: 10px 0px;
   text-align: center;
+  font-size: 13px;
   font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 .wrapper {
@@ -226,10 +266,9 @@ body {
   background: #f0f0f0;
 }
 
-.fmg-caption {
-  background: #222;
+.primary-background {
+  background: #ff0;
   color: #fff;
-  padding: 8px;
 }
 
 @media screen and (max-width: 959px) and (min-width: 768px){

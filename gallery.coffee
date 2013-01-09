@@ -49,6 +49,12 @@ class Gallery
     $(document).on "click", ".fmg-toggle-thumbs", =>
       @wrapper.find(".fmg-thumbs").toggleClass("is-hidden")
       false
+      
+    # bind captions toggle
+    # bind thumbs toggle
+    $(document).on "click", ".fmg-toggle-captions", =>
+      @wrapper.find(".fmg-captions").toggleClass("is-hidden")
+      false
     
     # bind swipe event (hammer.js)
 
@@ -69,6 +75,7 @@ class Gallery
     @set_current_elements()
     @set_navigation_hidden()
     @offset_slide_image()
+    @adjust_caption_height()
     @slide_wrappers().each (i,e) -> $(e).css("left","#{slide_offset}px")
     @thumb_wrapper().css("left","#{thumb_offset}px") if SETTINGS.thumbs
     window.location.hash = "#slide-#{@current}"
@@ -153,6 +160,10 @@ class Gallery
       diff = viewport_height - scaled_image_height
       image.css("margin-top",diff/2)
       image.css("height", scaled_image_height) 
+      
+  adjust_caption_height: ->
+    height = @wrapper.find(".fmg-caption:eq(#{@current-1})").height()
+    @wrapper.find(".fmg-captions").not(".is-hidden").height(height)
   
   load_slide_image: ->
     image = @wrapper.find(".fmg-slide:eq(#{@current-1}) img")
@@ -201,16 +212,16 @@ new Gallery("#gallery_one")
 # full screen
 # bind to touch start on mobile
 # add swipe gesture
-# make thumbs optional
-# make captions optional
-# ability to hide captions
-# ability to hide thumbs
-# Audio slot in caption
-# photo meta
 # bug onresize to large
 # pre-post slide
 
+# integration: 
+# photo meta
+
+
 # DONE ---- 
+# ability to hide captions - DONE
+# ability to hide thumbs - DONE
 # resize images based on width - DONE
 # only load images are they appear - DONE
 # different images for desktop and mobile - DONE
