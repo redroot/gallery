@@ -96,9 +96,10 @@ class Gallery
     @wrapper.removeClass("fmg-gallery-tablet fmg-gallery-mobile fmg-gallery-fullscreen")
     if fullscreen
       @wrapper.addClass("fmg-gallery-fullscreen")
-      console.log("Added class")
+      console.log("Added class", @wrapper.hasClass("fmg-gallery-fullscreen"))
       @wrapper.find(".fmg-viewport").height(@wrapper.height())
     else
+      console.log("Not fullscreen")
       @wrapper.addClass("fmg-gallery-tablet") if width < SETTINGS.breakpoints.tablet and width >= SETTINGS.breakpoints.mobile
       @wrapper.addClass("fmg-gallery-mobile") if width < SETTINGS.breakpoints.mobile
       @wrapper.find(".fmg-viewport, .fmg-menu-item").removeAttr("style")

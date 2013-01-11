@@ -121,9 +121,10 @@
       this.wrapper.removeClass("fmg-gallery-tablet fmg-gallery-mobile fmg-gallery-fullscreen");
       if (fullscreen) {
         this.wrapper.addClass("fmg-gallery-fullscreen");
-        console.log("Added class");
+        console.log("Added class", this.wrapper.hasClass("fmg-gallery-fullscreen"));
         this.wrapper.find(".fmg-viewport").height(this.wrapper.height());
       } else {
+        console.log("Not fullscreen");
         if (width < SETTINGS.breakpoints.tablet && width >= SETTINGS.breakpoints.mobile) {
           this.wrapper.addClass("fmg-gallery-tablet");
         }
