@@ -38,15 +38,17 @@
       return this.wrapper.find(".fmg-thumbs-wrapper").first();
     };
     Gallery.prototype.init_bindings = function() {
-      $(document).on("click", ".fmg-viewport-nav-left", __bind(function() {
+      var click;
+      click = "click";
+      $(document).on(click, ".fmg-viewport-nav-left", __bind(function() {
         this.slide_to(this.current - 1);
         return false;
       }, this));
-      $(document).on("click", ".fmg-viewport-nav-right", __bind(function() {
+      $(document).on(click, ".fmg-viewport-nav-right", __bind(function() {
         this.slide_to(this.current + 1);
         return false;
       }, this));
-      $(document).on("click", ".fmg-thumbs-wrapper img", __bind(function(e) {
+      $(document).on(click, ".fmg-thumbs-wrapper img", __bind(function(e) {
         var index;
         index = $(".fmg-thumbs-wrapper img").index(e.currentTarget);
         this.slide_to(index + 1);
@@ -55,15 +57,15 @@
       if (!this.has_fullscreen()) {
         $(".fmg-fullscreen").remove();
       }
-      $(document).on("click", ".fmg-fullscreen", __bind(function() {
+      $(document).on(click, ".fmg-fullscreen", __bind(function() {
         this.toggle_fullscreen();
         return false;
       }, this));
-      $(document).on("click", ".fmg-toggle-thumbs", __bind(function() {
+      $(document).on(click, ".fmg-toggle-thumbs", __bind(function() {
         this.wrapper.find(".fmg-thumbs").toggleClass("is-hidden");
         return false;
       }, this));
-      $(document).on("click", ".fmg-toggle-captions", __bind(function() {
+      $(document).on(click, ".fmg-toggle-captions", __bind(function() {
         this.wrapper.find(".fmg-captions").toggleClass("is-hidden");
         return false;
       }, this));
@@ -109,6 +111,7 @@
         fullscreen = false;
       }
       width = this.gallery_width();
+      console.log("" + this.current + " Fullscreen called " + fullscreen + " | " + this.full_screen_enabled);
       this.wrapper.addClass("is-resizing");
       if (this.resizing_timeout) {
         clearTimeout(this.resizing_timeout);
@@ -206,7 +209,7 @@
       return offset;
     };
     Gallery.prototype.offset_slide_image = function() {
-      var diff, h, h_diff, image, scale, scaled_diff, scaled_image_height, viewport_height, w, w_diff;
+      var diff, h, h_diff, image, scale, scaled_diff, scaled_image_height, viewport_height, w;
       viewport_height = this.wrapper.find(".fmg-viewport").height();
       image = this.wrapper.find(".fmg-slide:eq(" + (this.current - 1) + ") img");
       h = image.data("height");
@@ -217,7 +220,6 @@
         image.css("height", h);
         image.css("width", w);
         h_diff = viewport_height - h;
-        w_diff = this.gallery_width() - w;
         scaled_diff = viewport_height - scaled_image_height;
         if (h_diff > 0) {
           image.css("margin-top", h_diff / 2);

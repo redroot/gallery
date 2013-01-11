@@ -25,34 +25,37 @@ class Gallery
   thumb_wrapper: -> @wrapper.find(".fmg-thumbs-wrapper").first()
   
   init_bindings: -> 
+    # click or touch depending on what available
+    click = "click"
+    
     # bind clicks events
-    $(document).on "click", ".fmg-viewport-nav-left", => 
+    $(document).on click, ".fmg-viewport-nav-left", => 
       @slide_to(@current - 1)
       false
-    $(document).on "click", ".fmg-viewport-nav-right", => 
+    $(document).on click, ".fmg-viewport-nav-right", => 
       @slide_to(@current + 1)
       false
     
     # bind thumb click
-    $(document).on "click", ".fmg-thumbs-wrapper img", (e) =>
+    $(document).on click, ".fmg-thumbs-wrapper img", (e) =>
       index = $(".fmg-thumbs-wrapper img").index(e.currentTarget);
       @slide_to(index + 1);
       false
       
     # bind full screen events
     $(".fmg-fullscreen").remove() unless @has_fullscreen();
-    $(document).on "click", ".fmg-fullscreen", =>
+    $(document).on click, ".fmg-fullscreen", =>
       @toggle_fullscreen()
       false
       
     # bind thumbs toggle
-    $(document).on "click", ".fmg-toggle-thumbs", =>
+    $(document).on click, ".fmg-toggle-thumbs", =>
       @wrapper.find(".fmg-thumbs").toggleClass("is-hidden")
       false
       
     # bind captions toggle
     # bind thumbs toggle
-    $(document).on "click", ".fmg-toggle-captions", =>
+    $(document).on click, ".fmg-toggle-captions", =>
       @wrapper.find(".fmg-captions").toggleClass("is-hidden")
       false
     
@@ -83,6 +86,7 @@ class Gallery
   
   resize: (fullscreen=false)->
     width = @gallery_width()
+    console.log("#{@current} Fullscreen called #{fullscreen} | #{@full_screen_enabled}")
     
     @wrapper.addClass("is-resizing")
     clearTimeout(@resizing_timeout) if @resizing_timeout
@@ -164,7 +168,6 @@ class Gallery
       image.css("height",h)
       image.css("width",w)
       h_diff = viewport_height - h
-      w_diff = @gallery_width() - w
       scaled_diff = viewport_height - scaled_image_height
       image.css("margin-top",h_diff/2) if h_diff > 0
       image.css("height",viewport_height).css("width","") if h_diff < 0
