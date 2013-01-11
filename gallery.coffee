@@ -164,7 +164,6 @@ class Gallery
       image.css("height",h)
       image.css("width",w)
       h_diff = viewport_height - h
-      w_diff = @gallery_width() - w
       scaled_diff = viewport_height - scaled_image_height
       image.css("margin-top",h_diff/2) if h_diff > 0
       image.css("height",viewport_height).css("width","") if h_diff < 0
@@ -220,7 +219,7 @@ class Gallery
     
   resolve_current: ->
     if(window.location.hash == "" || window.location.hash.indexOf("#slide-") == -1) then return 1
-    parseInt(window.location.hash.split("#slide-",2)[1]) || 1;
+    parseInt(window.location.hash.split("#slide-",2)[1]) || 1
   
   loading: (state) ->
     if state  then @wrapper.addClass("is-loading") else @wrapper.removeClass("is-loading")
@@ -236,7 +235,6 @@ class Gallery
 new Gallery("#gallery_one")
 
 # TODO ----------------
-# full screen
 # bind to touch start on mobile
 # add swipe gesture
 # mobile: add class so hover states are always visible

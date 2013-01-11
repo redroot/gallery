@@ -206,7 +206,7 @@
       return offset;
     };
     Gallery.prototype.offset_slide_image = function() {
-      var diff, h, h_diff, image, scale, scaled_diff, scaled_image_height, viewport_height, w, w_diff;
+      var diff, h, h_diff, image, scale, scaled_diff, scaled_image_height, viewport_height, w;
       viewport_height = this.wrapper.find(".fmg-viewport").height();
       image = this.wrapper.find(".fmg-slide:eq(" + (this.current - 1) + ") img");
       h = image.data("height");
@@ -217,7 +217,6 @@
         image.css("height", h);
         image.css("width", w);
         h_diff = viewport_height - h;
-        w_diff = this.gallery_width() - w;
         scaled_diff = viewport_height - scaled_image_height;
         if (h_diff > 0) {
           image.css("margin-top", h_diff / 2);
