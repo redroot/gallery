@@ -175,13 +175,15 @@
       return document.cancelFullScreen();
     };
     Gallery.prototype.on_fullscreen_change = function() {
+      var time;
       this.full_screen_enabled = !this.full_screen_enabled;
       this.loading(true);
+      time = this.full_screen_enabled ? 1000 : 300;
       return setTimeout(__bind(function() {
         console.log("Timeout called: " + this.full_screen_enabled);
         this.loading(false);
         return this.resize(this.full_screen_enabled);
-      }, this), 1000);
+      }, this), time);
     };
     Gallery.prototype.has_fullscreen = function() {
       var _ref;
