@@ -181,7 +181,7 @@
         console.log("Timeout called: " + this.full_screen_enabled);
         this.loading(false);
         return this.resize(this.full_screen_enabled);
-      }, this), 200);
+      }, this), 500);
     };
     Gallery.prototype.has_fullscreen = function() {
       var _ref;
