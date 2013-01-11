@@ -178,6 +178,7 @@
       this.full_screen_enabled = !this.full_screen_enabled;
       this.loading(true);
       return setTimeout(__bind(function() {
+        console.log("Timeout called: " + this.full_screen_enabled);
         this.loading(false);
         return this.resize(this.full_screen_enabled);
       }, this), 200);

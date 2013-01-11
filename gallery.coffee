@@ -135,6 +135,7 @@ class Gallery
     @full_screen_enabled = !@full_screen_enabled
     @loading(true)
     setTimeout =>
+      console.log("Timeout called: #{@full_screen_enabled}")
       @loading(false)
       @resize(@full_screen_enabled)
     , 200
