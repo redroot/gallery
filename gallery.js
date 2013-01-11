@@ -178,9 +178,8 @@
       var time;
       this.full_screen_enabled = !this.full_screen_enabled;
       this.loading(true);
-      time = this.full_screen_enabled ? 1000 : 300;
+      time = this.full_screen_enabled ? 800 : 300;
       return setTimeout(__bind(function() {
-        console.log("Timeout called: " + this.full_screen_enabled);
         this.loading(false);
         return this.resize(this.full_screen_enabled);
       }, this), time);

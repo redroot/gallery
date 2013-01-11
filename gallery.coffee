@@ -134,9 +134,8 @@ class Gallery
   on_fullscreen_change: =>
     @full_screen_enabled = !@full_screen_enabled
     @loading(true)
-    time = if @full_screen_enabled then 1000 else 300
+    time = if @full_screen_enabled then 800 else 300
     setTimeout =>
-      console.log("Timeout called: #{@full_screen_enabled}")
       @loading(false)
       @resize(@full_screen_enabled)
     , time
