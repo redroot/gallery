@@ -121,6 +121,7 @@
       this.wrapper.removeClass("fmg-gallery-tablet fmg-gallery-mobile fmg-gallery-fullscreen");
       if (fullscreen) {
         this.wrapper.addClass("fmg-gallery-fullscreen");
+        console.log("Added class");
         this.wrapper.find(".fmg-viewport").height(this.wrapper.height());
       } else {
         if (width < SETTINGS.breakpoints.tablet && width >= SETTINGS.breakpoints.mobile) {
@@ -216,7 +217,6 @@
       scale = this.gallery_width() / w;
       scaled_image_height = Math.round(scale * h);
       if (this.full_screen_enabled) {
-        console.log(this.current, "Fullscreen?", this.full_screen_enabled);
         image.css("height", h);
         image.css("width", w);
         h_diff = viewport_height - h;

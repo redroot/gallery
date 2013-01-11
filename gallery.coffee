@@ -96,6 +96,7 @@ class Gallery
     @wrapper.removeClass("fmg-gallery-tablet fmg-gallery-mobile fmg-gallery-fullscreen")
     if fullscreen
       @wrapper.addClass("fmg-gallery-fullscreen")
+      console.log("Added class")
       @wrapper.find(".fmg-viewport").height(@wrapper.height())
     else
       @wrapper.addClass("fmg-gallery-tablet") if width < SETTINGS.breakpoints.tablet and width >= SETTINGS.breakpoints.mobile
@@ -164,7 +165,6 @@ class Gallery
     scale = @gallery_width() / w
     scaled_image_height = Math.round(scale * h)
     if @full_screen_enabled
-      console.log(@current,"Fullscreen?",@full_screen_enabled)
       image.css("height",h)
       image.css("width",w)
       h_diff = viewport_height - h
