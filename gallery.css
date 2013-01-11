@@ -10,10 +10,10 @@
 
 .fmg-slides-wrapper, .fmg-captions-wrapper, .fmg-thumbs-wrapper {
   position: relative;
-  -webkit-transition: all 0.4s ease-in-out;
-  -moz-transition: all 0.4s ease-in-out;
-  -o-transition: al 0.4s ease-in-out;
-  transition: all 0.4s ease-n-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: al 0.3s ease-in-out;
+  transition: all 0.3s ease-n-out;
 }
 
 .fmg-slide, .fmg-caption {
@@ -22,7 +22,7 @@
 }
 
 .fmg-gallery {
-  background: #fff;
+  background: #eee;
   position: relative;
 }
 
@@ -49,6 +49,10 @@
   transition: none;
 }
 
+.fmg-viewport, .fmg-slide img {
+  height: 550px;
+}
+
 .fmg-gallery-tablet .fmg-viewport,
 .fmg-gallery-tablet .fmg-slide img {
   height: 400px;
@@ -59,15 +63,18 @@
   height: 250px;
 }
 
+.fmg-gallery-fullscreen .fmg-viewport,
+.fmg-gallery-fullscreen .fmg-slide img {
+  height: auto;
+}
+
+
 /* Fullscreen mode */
 
 .fmg-gallery-fullscreen {
   height: 100%;
   width: 100%;
-}
-
-.fmg-gallery-fullscreen .fmg-viewport {
-  height: 100%;
+  background: #fdd;
 }
 
 .fmg-gallery-fullscreen .fmg-captions {
@@ -89,25 +96,31 @@
 }
 
 .fmg-viewport {
-  background: #eee;
   height: 550px;
   position: relative;
 }
 
-.fmg-menu-link {
+.fmg-menu-item {
   background: #333;
   background: rgba(0,0,0,0.5);
   color: #fff;
   z-index: 10;
   padding: 5px;
   position: absolute;
-  -webkit-transition: opacity 0.4s ease-in-out;
-  -moz-transition: opacity 0.4s ease-in-out;
-  -o-transition: opacity 0.4s ease-in-out;
-  transition: opacity 0.4s ease-n-out;
+  opacity: 0.8;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-n-out;
 }
 
-.fmg-menu-link:hover {
+.fmg-viewport:hover .fmg-menu-item,
+.fmg-gallery.is-touch .fmg-menu-item {
+  opacity: 1;
+}
+
+
+.fmg-menu-item:hover {
   background: #000;
   background: rgba(0,0,0,1);
 }
@@ -130,6 +143,11 @@
 .fmg-no-captions .fmg-toggle-captions { display: none; }
 .fmg-no-thumbs .fmg-toggle-thumbs { display: none; }
 
+.fmg-count {
+  bottom: 5px;
+  left: 5px;
+}
+
 .fmg-viewport-nav {
   position: absolute;
   background: rgba(0,0,0,0.5);
@@ -140,10 +158,10 @@
   cursor: pointer;
   opacity: 0;
   z-index: 10;
-  -webkit-transition: all 0.4s ease-in-out;
-  -moz-transition: all 0.4s ease-in-out;
-  -o-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-n-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-n-out;
 }
 
 .fmg-viewport:hover .fmg-viewport-nav { opacity: 1; }
@@ -165,19 +183,23 @@
   vertical-align: middle;
 }
 .fmg-slide img {
-  max-height: 550px;
+  max-height: 100%;
   max-width: 100%;
   display: inline-block;
   vertical-align: middle;
 }
 
+.fmg-gallery-fullscreen .fmg-slide img {
+  max-height: auto;
+}
+
 .fmg-captions {
   background: #ccc;
   height: 50px;
-  -webkit-transition: height 0.4s ease-in-out;
-  -moz-transition: height 0.4s ease-in-out;
-  -o-transition: height 0.4s ease-in-out;
-  transition: height 0.4s ease-n-out;
+  -webkit-transition: height 0.3s ease-in-out;
+  -moz-transition: height 0.3s ease-in-out;
+  -o-transition: height 0.3s ease-in-out;
+  transition: height 0.3s ease-n-out;
 }
 
 .fmg-captions.is-hidden { height: 0px !important; }
@@ -205,10 +227,10 @@
   width: 30px;
   height: 30px;
   overflow: hidden;
-  -webkit-transition: width 0.4s ease-in-out;
-  -moz-transition: width 0.4s ease-in-out;
-  -o-transition: width 0.4s ease-in-out;
-  transition: width 0.4s ease-n-out;
+  -webkit-transition: width 0.3s ease-in-out;
+  -moz-transition: width 0.3s ease-in-out;
+  -o-transition: width 0.3s ease-in-out;
+  transition: width 0.3s ease-n-out;
 }
 
 .fmg-caption-audio:hover { width: 100px; }
@@ -216,10 +238,10 @@
 .fmg-thumbs {
   background: #aaa; 
   height: 140px;  
-  -webkit-transition: height 0.4s ease-in-out;
-  -moz-transition: height 0.4s ease-in-out;
-  -o-transition: height 0.4s ease-in-out;
-  transition: height 0.4s ease-n-out;
+  -webkit-transition: height 0.3s ease-in-out;
+  -moz-transition: height 0.3s ease-in-out;
+  -o-transition: height 0.3s ease-in-out;
+  transition: height 0.3s ease-n-out;
 }
 
 .fmg-thumbs.is-hidden { height: 0px; }

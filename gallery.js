@@ -93,7 +93,8 @@
       this.set_current_elements();
       this.set_navigation_hidden();
       this.offset_slide_image();
-      this.adjust_caption_height();
+      this.update_caption_height();
+      this.update_slide_count();
       this.slide_wrappers().each(function(i, e) {
         return $(e).css("left", "" + slide_offset + "px");
       });
@@ -118,12 +119,15 @@
       this.wrapper.removeClass("fmg-gallery-tablet fmg-gallery-mobile fmg-gallery-fullscreen");
       if (fullscreen) {
         this.wrapper.addClass("fmg-gallery-fullscreen");
-      }
-      if (width < SETTINGS.breakpoints.tablet && width >= SETTINGS.breakpoints.mobile) {
-        this.wrapper.addClass("fmg-gallery-tablet");
-      }
-      if (width < SETTINGS.breakpoints.mobile) {
-        this.wrapper.addClass("fmg-gallery-mobile");
+        this.wrapper.find(".fmg-viewport").height(this.wrapper.height());
+      } else {
+        if (width < SETTINGS.breakpoints.tablet && width >= SETTINGS.breakpoints.mobile) {
+          this.wrapper.addClass("fmg-gallery-tablet");
+        }
+        if (width < SETTINGS.breakpoints.mobile) {
+          this.wrapper.addClass("fmg-gallery-mobile");
+        }
+        this.wrapper.find(".fmg-viewport, .fmg-menu-item").removeAttr("style");
       }
       this.wrapper.find(".fmg-slide, .fmg-caption").each(function() {
         return $(this).width(width);
@@ -151,9 +155,9 @@
     Gallery.prototype.enter_fullscreen = function() {
       var el;
       el = this.wrapper[0];
-      el.onwebkitfullscreenchange = this.on_fullscreen_change;
-      el.onmozfullscreenchange = this.on_fullscreen_change;
-      el.onfullscreenchange = this.on_onfullscreen_change;
+      document.onwebkitfullscreenchange = this.on_fullscreen_change;
+      document.onmozfullscreenchange = this.on_fullscreen_change;
+      document.onfullscreenchange = this.on_fullscreen_change;
       if (el.webkitRequestFullscreen) {
         return el.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
       }
@@ -168,7 +172,6 @@
     };
     Gallery.prototype.on_fullscreen_change = function() {
       this.full_screen_enabled = !this.full_screen_enabled;
-      console.log("fullscreen changing to " + this.full_screen_enabled);
       this.loading(true);
       return setTimeout(__bind(function() {
         this.loading(false);
@@ -203,33 +206,65 @@
       return offset;
     };
     Gallery.prototype.offset_slide_image = function() {
-      var diff, h, image, scale, scaled_image_height, viewport_height, w;
+      var diff, h, h_diff, image, scale, scaled_diff, scaled_image_height, viewport_height, w, w_diff;
       viewport_height = this.wrapper.find(".fmg-viewport").height();
       image = this.wrapper.find(".fmg-slide:eq(" + (this.current - 1) + ") img");
       h = image.data("height");
       w = image.data("width");
       scale = this.gallery_width() / w;
       scaled_image_height = Math.round(scale * h);
-      if (scaled_image_height < viewport_height) {
+      if (this.full_screen_enabled) {
+        image.css("height", h);
+        image.css("width", w);
+        h_diff = viewport_height - h;
+        w_diff = this.gallery_width() - w;
+        scaled_diff = viewport_height - scaled_image_height;
+        if (h_diff > 0) {
+          image.css("margin-top", h_diff / 2);
+        }
+        if (h_diff < 0) {
+          image.css("height", viewport_height).css("width", "");
+        }
+        if (scaled_diff < 0 && scale < 1) {
+          return image.css("height", scaled_image_height);
+        }
+      } else if (scaled_image_height < viewport_height) {
         diff = viewport_height - scaled_image_height;
         image.css("margin-top", diff / 2);
-        return image.css("height", scaled_image_height);
+        image.css("height", scaled_image_height);
+        return image.css("width", "");
+      } else {
+        image.css("margin-top", "");
+        image.css("height", "");
+        return image.css("width", "");
       }
     };
-    Gallery.prototype.adjust_caption_height = function() {
-      var height;
+    Gallery.prototype.update_slide_count = function() {
+      this.wrapper.find(".fmg-count-current").text(this.current);
+      return this.wrapper.find(".fmg-count-total").text(this.count);
+    };
+    Gallery.prototype.update_caption_height = function() {
+      var caption_offset, captions, height;
       height = this.wrapper.find(".fmg-caption:eq(" + (this.current - 1) + ")").height();
-      return this.wrapper.find(".fmg-captions").not(".is-hidden").height(height);
+      captions = this.wrapper.find(".fmg-captions");
+      captions.not(".is-hidden").height(height);
+      if (this.full_screen_enabled) {
+        caption_offset = captions.hasClass("is-hidden") ? 5 : height + 5;
+        return this.wrapper.find(".fmg-menu-item").css("bottom", caption_offset);
+      }
     };
     Gallery.prototype.load_slide_image = function() {
       var image, src;
       image = this.wrapper.find(".fmg-slide:eq(" + (this.current - 1) + ") img");
-      src = this.gallery_width() < SETTINGS.breakpoints.mobile ? "src-mobile" : "src";
-      if (image.data("loaded-" + src)) {
+      src = this.gallery_width() < SETTINGS.breakpoints.mobile && image.data("src-mobile") ? "src-mobile" : "src";
+      if (this.full_screen_enabled && image.data("src-fullscreen")) {
+        src = "src-fullscreen";
+      }
+      if (image.data("src-loaded") === src) {
         return;
       }
       image.attr("src", image.data(src));
-      return image.data("loaded-" + src, true);
+      return image.data("src-loaded", src);
     };
     Gallery.prototype.load_thumb_images = function(start, end) {
       return this.wrapper.find(".fmg-thumbs img").each(__bind(function(i, e) {
@@ -265,9 +300,8 @@
     };
     Gallery.prototype.loading = function(state) {
       if (state) {
-        this.wrapper.addClass("is-loading");
-      }
-      if (!state) {
+        return this.wrapper.addClass("is-loading");
+      } else {
         return this.wrapper.removeClass("is-loading");
       }
     };

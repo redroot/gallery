@@ -75,7 +75,8 @@ class Gallery
     @set_current_elements()
     @set_navigation_hidden()
     @offset_slide_image()
-    @adjust_caption_height()
+    @update_caption_height()
+    @update_slide_count()
     @slide_wrappers().each (i,e) -> $(e).css("left","#{slide_offset}px")
     @thumb_wrapper().css("left","#{thumb_offset}px") if SETTINGS.thumbs
     window.location.hash = "#slide-#{@current}"
@@ -90,9 +91,13 @@ class Gallery
     , 100)
     
     @wrapper.removeClass("fmg-gallery-tablet fmg-gallery-mobile fmg-gallery-fullscreen")
-    @wrapper.addClass("fmg-gallery-fullscreen") if fullscreen
-    @wrapper.addClass("fmg-gallery-tablet") if width < SETTINGS.breakpoints.tablet and width >= SETTINGS.breakpoints.mobile
-    @wrapper.addClass("fmg-gallery-mobile") if width < SETTINGS.breakpoints.mobile
+    if fullscreen
+      @wrapper.addClass("fmg-gallery-fullscreen")
+      @wrapper.find(".fmg-viewport").height(@wrapper.height())
+    else
+      @wrapper.addClass("fmg-gallery-tablet") if width < SETTINGS.breakpoints.tablet and width >= SETTINGS.breakpoints.mobile
+      @wrapper.addClass("fmg-gallery-mobile") if width < SETTINGS.breakpoints.mobile
+      @wrapper.find(".fmg-viewport, .fmg-menu-item").removeAttr("style")
  
     @wrapper.find(".fmg-slide, .fmg-caption").each -> $(this).width(width)  
     @slide_wrappers().each (i,e) => $(e).width(width * @count)      
@@ -110,9 +115,9 @@ class Gallery
       
   enter_fullscreen: ->
     el = @wrapper[0]
-    el.onwebkitfullscreenchange = @on_fullscreen_change
-    el.onmozfullscreenchange = @on_fullscreen_change
-    el.onfullscreenchange = @on_onfullscreen_change
+    document.onwebkitfullscreenchange = @on_fullscreen_change
+    document.onmozfullscreenchange = @on_fullscreen_change
+    document.onfullscreenchange = @on_fullscreen_change
     return el.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT) if el.webkitRequestFullscreen
     return el.mozRequestFullScreen() if el.mozRequestFullScreen
     el.requestFullscreen()
@@ -123,7 +128,6 @@ class Gallery
       
   on_fullscreen_change: =>
     @full_screen_enabled = !@full_screen_enabled
-    console.log("fullscreen changing to #{@full_screen_enabled}")
     @loading(true)
     setTimeout =>
       @loading(false)
@@ -156,21 +160,45 @@ class Gallery
     w = image.data("width")
     scale = @gallery_width() / w
     scaled_image_height = Math.round(scale * h)
-    if scaled_image_height < viewport_height
+    if @full_screen_enabled
+      image.css("height",h)
+      image.css("width",w)
+      h_diff = viewport_height - h
+      w_diff = @gallery_width() - w
+      scaled_diff = viewport_height - scaled_image_height
+      image.css("margin-top",h_diff/2) if h_diff > 0
+      image.css("height",viewport_height).css("width","") if h_diff < 0
+      image.css("height",scaled_image_height) if scaled_diff < 0 and scale < 1
+    else if scaled_image_height < viewport_height
       diff = viewport_height - scaled_image_height
       image.css("margin-top",diff/2)
-      image.css("height", scaled_image_height) 
+      image.css("height", scaled_image_height)
+      image.css("width","")
+    else
+      image.css("margin-top","")
+      image.css("height","")
+      image.css("width","")
+     
       
-  adjust_caption_height: ->
+  update_slide_count: ->
+    @wrapper.find(".fmg-count-current").text(@current)
+    @wrapper.find(".fmg-count-total").text(@count)
+      
+  update_caption_height: ->
     height = @wrapper.find(".fmg-caption:eq(#{@current-1})").height()
-    @wrapper.find(".fmg-captions").not(".is-hidden").height(height)
+    captions =  @wrapper.find(".fmg-captions")
+    captions.not(".is-hidden").height(height)
+    if @full_screen_enabled
+      caption_offset = if captions.hasClass("is-hidden") then 5 else height + 5
+      @wrapper.find(".fmg-menu-item").css("bottom",caption_offset)
   
   load_slide_image: ->
     image = @wrapper.find(".fmg-slide:eq(#{@current-1}) img")
-    src = if @gallery_width() < SETTINGS.breakpoints.mobile then "src-mobile" else "src"
-    if image.data("loaded-#{src}") then return
+    src = if @gallery_width() < SETTINGS.breakpoints.mobile and image.data("src-mobile") then "src-mobile" else "src"
+    src = "src-fullscreen" if @full_screen_enabled and image.data("src-fullscreen")
+    if image.data("src-loaded") == src then return
     image.attr("src",image.data(src))
-    image.data("loaded-#{src}",true)
+    image.data("src-loaded",src)
   
   load_thumb_images: (start,end) ->
     @wrapper.find(".fmg-thumbs img").each (i,e) =>
@@ -195,8 +223,7 @@ class Gallery
     parseInt(window.location.hash.split("#slide-",2)[1]) || 1;
   
   loading: (state) ->
-    if state  then @wrapper.addClass("is-loading")
-    if !state then @wrapper.removeClass("is-loading")
+    if state  then @wrapper.addClass("is-loading") else @wrapper.removeClass("is-loading")
   
   add_listener: (event,fn) ->
     @events or= []
@@ -212,6 +239,7 @@ new Gallery("#gallery_one")
 # full screen
 # bind to touch start on mobile
 # add swipe gesture
+# mobile: add class so hover states are always visible
 # bug onresize to large
 # pre-post slide
 
