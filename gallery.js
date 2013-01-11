@@ -5,7 +5,7 @@
     var SETTINGS;
     SETTINGS = {
       thumbs: true,
-      thumb_width: 150,
+      thumb_width: 120,
       captions: true,
       meta: true,
       breakpoints: {
@@ -111,7 +111,6 @@
         fullscreen = false;
       }
       width = this.gallery_width();
-      console.log("" + this.current + " Fullscreen called " + fullscreen + " | " + this.full_screen_enabled);
       this.wrapper.addClass("is-resizing");
       if (this.resizing_timeout) {
         clearTimeout(this.resizing_timeout);
@@ -217,6 +216,7 @@
       scale = this.gallery_width() / w;
       scaled_image_height = Math.round(scale * h);
       if (this.full_screen_enabled) {
+        console.log(this.current, "Fullscreen?", this.full_screen_enabled);
         image.css("height", h);
         image.css("width", w);
         h_diff = viewport_height - h;

@@ -1,7 +1,7 @@
 class Gallery
   SETTINGS = 
     thumbs:       true
-    thumb_width:  150
+    thumb_width:  120
     captions:     true
     meta:         true
     breakpoints:  
@@ -86,8 +86,7 @@ class Gallery
   
   resize: (fullscreen=false)->
     width = @gallery_width()
-    console.log("#{@current} Fullscreen called #{fullscreen} | #{@full_screen_enabled}")
-    
+
     @wrapper.addClass("is-resizing")
     clearTimeout(@resizing_timeout) if @resizing_timeout
     @resizing_timeout = setTimeout(=> 
@@ -165,6 +164,7 @@ class Gallery
     scale = @gallery_width() / w
     scaled_image_height = Math.round(scale * h)
     if @full_screen_enabled
+      console.log(@current,"Fullscreen?",@full_screen_enabled)
       image.css("height",h)
       image.css("width",w)
       h_diff = viewport_height - h
