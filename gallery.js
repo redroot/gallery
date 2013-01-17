@@ -91,7 +91,9 @@
         hammer.onswipe = __bind(function(ev) {
           var modifier;
           modifier = ev.direction === "left" ? -1 : 1;
-          alert(this.current() + modifier);
+          alert(modifier);
+          alert(this.current());
+          alert("work?");
           return this.slide_to(this.current() + modifier);
         }, this);
       }
