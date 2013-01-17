@@ -317,9 +317,9 @@
     };
     Gallery.prototype.has_touch = function() {
       alert(__indexOf.call(window, 'ontouchstart') >= 0);
-      alert(window.DocumentTouch);
-      alert(document instanceof DocumentTouch);
-      alert(typeof TouchEvent, alert(__indexOf.call(document, 'createTouch') >= 0));
+      alert(typeof DocumentTouch);
+      alert(typeof TouchEvent);
+      alert(__indexOf.call(document, 'createTouch') >= 0);
       if (__indexOf.call(window, 'ontouchstart') >= 0 || (window.DocumentTouch && document instanceof DocumentTouch)) {
         return true;
       } else {
