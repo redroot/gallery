@@ -17,7 +17,7 @@ class Gallery
     @current     = @resolve_current()
     @count       = @wrapper.find(".fmg-slide").length
     @loading(true)
-    @wrapper.addClass("is-touch") if @has_touch()
+    #@wrapper.addClass("is-touch") if @has_touch()
     @init_bindings()
     @resize()
     @loading(false)
@@ -25,9 +25,7 @@ class Gallery
   slide_wrappers: -> @wrapper.find(".fmg-slides-wrapper, .fmg-captions-wrapper")
   thumb_wrapper: -> @wrapper.find(".fmg-thumbs-wrapper").first()
   
-  init_bindings: -> 
-    alert(@has_touch())
-    
+  init_bindings: ->     
     # click or touch depending on what available
     click = if @has_touch() then "touchstart" else "click"
     
@@ -234,6 +232,8 @@ class Gallery
     if state  then @wrapper.addClass("is-loading") else @wrapper.removeClass("is-loading")
   
   has_touch: ->
+    alert('ontouchstart' in window)
+    alert((window.DocumentTouch && document instanceof DocumentTouch))
     if('ontouchstart' in window or (window.DocumentTouch && document instanceof DocumentTouch))
       return true
     else

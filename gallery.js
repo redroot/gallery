@@ -32,9 +32,6 @@
       this.current = this.resolve_current();
       this.count = this.wrapper.find(".fmg-slide").length;
       this.loading(true);
-      if (this.has_touch()) {
-        this.wrapper.addClass("is-touch");
-      }
       this.init_bindings();
       this.resize();
       this.loading(false);
@@ -47,7 +44,6 @@
     };
     Gallery.prototype.init_bindings = function() {
       var click;
-      alert(this.has_touch());
       click = this.has_touch() ? "touchstart" : "click";
       $(document).on(click, ".fmg-viewport-nav-left", __bind(function() {
         this.slide_to(this.current - 1);
@@ -320,6 +316,8 @@
       }
     };
     Gallery.prototype.has_touch = function() {
+      alert(__indexOf.call(window, 'ontouchstart') >= 0);
+      alert(window.DocumentTouch && document instanceof DocumentTouch);
       if (__indexOf.call(window, 'ontouchstart') >= 0 || (window.DocumentTouch && document instanceof DocumentTouch)) {
         return true;
       } else {
