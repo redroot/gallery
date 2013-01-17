@@ -17,7 +17,7 @@ class Gallery
     @current     = @resolve_current()
     @count       = @wrapper.find(".fmg-slide").length
     @loading(true)
-    #@wrapper.addClass("is-touch") if @has_touch()
+    @wrapper.addClass("is-touch") if @has_touch()
     @init_bindings()
     @resize()
     @loading(false)
@@ -28,7 +28,6 @@ class Gallery
   init_bindings: ->     
     # click or touch depending on what available
     click = if @has_touch() then "touchstart" else "click"
-    alert(click)
     
     # bind clicks events
     $(document).on click, ".fmg-viewport-nav-left", => 
@@ -60,14 +59,20 @@ class Gallery
     $(document).on click, ".fmg-toggle-captions", =>
       @wrapper.find(".fmg-captions").toggleClass("is-hidden")
       false
-    
-    # bind swipe event (hammer.js)
 
     # bind keypress event
     $(document).keydown (e) =>
       if e.keyCode == 37 then @slide_to(@current - 1)
       if e.keyCode == 39 then @slide_to(@current + 1)
       
+    # bind swipe event (hammer.js)
+    if @has_touch() and window.Hammer
+      hammer = new Hammer(@wrapper.find(".fmg-viewport")[0])
+      hammer.onswipe = (ev) ->
+        modifier = if ev.direction == "left" then -1 else 1
+        alert(ev.direction + " " + modifier)
+        @slide_to(index + modifier)
+    
     # bind resize event
     window.onresize = => @resize()
     

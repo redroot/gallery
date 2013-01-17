@@ -32,6 +32,9 @@
       this.current = this.resolve_current();
       this.count = this.wrapper.find(".fmg-slide").length;
       this.loading(true);
+      if (this.has_touch()) {
+        this.wrapper.addClass("is-touch");
+      }
       this.init_bindings();
       this.resize();
       this.loading(false);
@@ -43,9 +46,8 @@
       return this.wrapper.find(".fmg-thumbs-wrapper").first();
     };
     Gallery.prototype.init_bindings = function() {
-      var click;
+      var click, hammer;
       click = this.has_touch() ? "touchstart" : "click";
-      alert(click);
       $(document).on(click, ".fmg-viewport-nav-left", __bind(function() {
         this.slide_to(this.current - 1);
         return false;
@@ -83,6 +85,15 @@
           return this.slide_to(this.current + 1);
         }
       }, this));
+      if (this.has_touch() && window.Hammer) {
+        hammer = new Hammer(this.wrapper.find(".fmg-viewport")[0]);
+        hammer.onswipe = function(ev) {
+          var modifier;
+          modifier = ev.direction === "left" ? -1 : 1;
+          alert(ev.direction + " " + modifier);
+          return this.slide_to(index + modifier);
+        };
+      }
       return window.onresize = __bind(function() {
         return this.resize();
       }, this);
