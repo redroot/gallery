@@ -86,7 +86,6 @@
         }
       }, this));
       if (this.has_touch() && window.Hammer) {
-        alert("YAY HAMMER" + typeof window.Hammer);
         hammer = new Hammer(this.wrapper.find(".fmg-viewport")[0]);
         hammer.onswipe = __bind(function(ev) {
           var modifier;
