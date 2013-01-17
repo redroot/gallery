@@ -72,9 +72,9 @@ class Gallery
       hammer.onswipe = (ev) =>
         modifier = if ev.direction == "left" then -1 else 1
         alert(modifier)
-        alert(@current())
+        alert(@current)
         alert("work?")
-        @slide_to(@current() + modifier)
+        @slide_to(@current + modifier)
     
     # bind resize event
     window.onresize = => @resize()
