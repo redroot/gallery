@@ -87,12 +87,11 @@
       }, this));
       if (this.has_touch() && window.Hammer) {
         hammer = new Hammer(this.wrapper.find(".fmg-viewport")[0]);
-        hammer.onswipe = function(ev) {
+        hammer.onswipe = __bind(function(ev) {
           var modifier;
           modifier = ev.direction === "left" ? -1 : 1;
-          alert(ev.direction + " " + modifier);
           return this.slide_to(index + modifier);
-        };
+        }, this);
       }
       return window.onresize = __bind(function() {
         return this.resize();
