@@ -234,8 +234,7 @@ class Gallery
   has_touch: ->
     alert('ontouchstart' in window)
     alert(window.DocumentTouch)
-    alert(document instanceof DocumentTouch)
-    alert(typeof TouchEvent
+    alert(typeof TouchEvent)
     alert('createTouch' in document))
     if('ontouchstart' in window or (window.DocumentTouch && document instanceof DocumentTouch))
       return true
