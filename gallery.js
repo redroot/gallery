@@ -86,11 +86,12 @@
         }
       }, this));
       if (this.has_touch() && window.Hammer) {
+        alert("YAY HAMMER");
         hammer = new Hammer(this.wrapper.find(".fmg-viewport")[0]);
         hammer.onswipe = __bind(function(ev) {
           var modifier;
           modifier = ev.direction === "left" ? -1 : 1;
-          return this.slide_to(index + modifier);
+          return this.slide_to(this.current() + modifier);
         }, this);
       }
       return window.onresize = __bind(function() {
