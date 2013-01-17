@@ -17,6 +17,7 @@ class Gallery
     @current     = @resolve_current()
     @count       = @wrapper.find(".fmg-slide").length
     @loading(true)
+    @wrapper.addClass("is-touch") if @has_touch()
     @init_bindings()
     @resize()
     @loading(false)
@@ -25,8 +26,10 @@ class Gallery
   thumb_wrapper: -> @wrapper.find(".fmg-thumbs-wrapper").first()
   
   init_bindings: -> 
+    alert(@has_touch())
+    
     # click or touch depending on what available
-    click = "click"
+    click = if @has_touch() then "touchstart" else "click"
     
     # bind clicks events
     $(document).on click, ".fmg-viewport-nav-left", => 
@@ -230,6 +233,12 @@ class Gallery
   loading: (state) ->
     if state  then @wrapper.addClass("is-loading") else @wrapper.removeClass("is-loading")
   
+  has_touch: ->
+    if('ontouchstart' in window or (window.DocumentTouch && document instanceof DocumentTouch))
+      return true
+    else
+      return false
+  
   add_listener: (event,fn) ->
     @events or= []
     @events[event] = [] unless @events[event]
@@ -237,6 +246,7 @@ class Gallery
   
   trigger: (event,args) ->
     (cb(args) for cb in @events[event]) if @events[event]
+  
   
 new Gallery("#gallery_one")
 

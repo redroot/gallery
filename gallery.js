@@ -1,6 +1,11 @@
 (function() {
   var Gallery;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __indexOf = Array.prototype.indexOf || function(item) {
+    for (var i = 0, l = this.length; i < l; i++) {
+      if (this[i] === item) return i;
+    }
+    return -1;
+  };
   Gallery = (function() {
     var SETTINGS;
     SETTINGS = {
@@ -27,6 +32,9 @@
       this.current = this.resolve_current();
       this.count = this.wrapper.find(".fmg-slide").length;
       this.loading(true);
+      if (this.has_touch()) {
+        this.wrapper.addClass("is-touch");
+      }
       this.init_bindings();
       this.resize();
       this.loading(false);
@@ -39,7 +47,8 @@
     };
     Gallery.prototype.init_bindings = function() {
       var click;
-      click = "click";
+      alert(this.has_touch());
+      click = this.has_touch() ? "touchstart" : "click";
       $(document).on(click, ".fmg-viewport-nav-left", __bind(function() {
         this.slide_to(this.current - 1);
         return false;
@@ -308,6 +317,13 @@
         return this.wrapper.addClass("is-loading");
       } else {
         return this.wrapper.removeClass("is-loading");
+      }
+    };
+    Gallery.prototype.has_touch = function() {
+      if (__indexOf.call(window, 'ontouchstart') >= 0 || (window.DocumentTouch && document instanceof DocumentTouch)) {
+        return true;
+      } else {
+        return false;
       }
     };
     Gallery.prototype.add_listener = function(event, fn) {
