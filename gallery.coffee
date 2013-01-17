@@ -67,7 +67,7 @@ class Gallery
       
     # bind swipe event (hammer.js)
     if @has_touch() and window.Hammer
-      alert("YAY HAMMER")
+      alert("YAY HAMMER" + typeof window.Hammer)
       hammer = new Hammer(@wrapper.find(".fmg-viewport")[0])
       hammer.onswipe = (ev) =>
         modifier = if ev.direction == "left" then -1 else 1
