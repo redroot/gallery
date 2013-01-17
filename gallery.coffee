@@ -236,7 +236,7 @@ class Gallery
     alert(typeof DocumentTouch)
     alert(typeof TouchEvent)
     alert('createTouch' in document)
-    if('ontouchstart' in window or (window.DocumentTouch && document instanceof DocumentTouch))
+    if('ontouchstart' in window or (window.DocumentTouch && document instanceof DocumentTouch) or typeof TouchEvent == "object")
       return true
     else
       return false

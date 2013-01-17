@@ -320,7 +320,7 @@
       alert(typeof DocumentTouch);
       alert(typeof TouchEvent);
       alert(__indexOf.call(document, 'createTouch') >= 0);
-      if (__indexOf.call(window, 'ontouchstart') >= 0 || (window.DocumentTouch && document instanceof DocumentTouch)) {
+      if (__indexOf.call(window, 'ontouchstart') >= 0 || (window.DocumentTouch && document instanceof DocumentTouch) || typeof TouchEvent === "object") {
         return true;
       } else {
         return false;
