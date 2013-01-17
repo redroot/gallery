@@ -45,6 +45,7 @@
     Gallery.prototype.init_bindings = function() {
       var click;
       click = this.has_touch() ? "touchstart" : "click";
+      alert(click);
       $(document).on(click, ".fmg-viewport-nav-left", __bind(function() {
         this.slide_to(this.current - 1);
         return false;
@@ -316,10 +317,6 @@
       }
     };
     Gallery.prototype.has_touch = function() {
-      alert(__indexOf.call(window, 'ontouchstart') >= 0);
-      alert(typeof DocumentTouch);
-      alert(typeof TouchEvent);
-      alert(__indexOf.call(document, 'createTouch') >= 0);
       if (__indexOf.call(window, 'ontouchstart') >= 0 || (window.DocumentTouch && document instanceof DocumentTouch) || typeof TouchEvent === "object") {
         return true;
       } else {

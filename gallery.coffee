@@ -28,6 +28,7 @@ class Gallery
   init_bindings: ->     
     # click or touch depending on what available
     click = if @has_touch() then "touchstart" else "click"
+    alert(click)
     
     # bind clicks events
     $(document).on click, ".fmg-viewport-nav-left", => 
@@ -232,10 +233,6 @@ class Gallery
     if state  then @wrapper.addClass("is-loading") else @wrapper.removeClass("is-loading")
   
   has_touch: ->
-    alert('ontouchstart' in window)
-    alert(typeof DocumentTouch)
-    alert(typeof TouchEvent)
-    alert('createTouch' in document)
     if('ontouchstart' in window or (window.DocumentTouch && document instanceof DocumentTouch) or typeof TouchEvent == "object")
       return true
     else
