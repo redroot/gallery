@@ -70,10 +70,7 @@ class Gallery
       alert("YAY HAMMER" + typeof window.Hammer)
       hammer = new Hammer(@wrapper.find(".fmg-viewport")[0])
       hammer.onswipe = (ev) =>
-        modifier = if ev.direction == "left" then -1 else 1
-        alert(modifier)
-        alert(@current)
-        alert("work?")
+        modifier = if ev.direction == "left" then 1 else -1
         @slide_to(@current + modifier)
     
     # bind resize event
