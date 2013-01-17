@@ -317,7 +317,8 @@
     };
     Gallery.prototype.has_touch = function() {
       alert(__indexOf.call(window, 'ontouchstart') >= 0);
-      alert(window.DocumentTouch && document instanceof DocumentTouch);
+      alert(window.DocumentTouch);
+      alert(document instanceof DocumentTouch);
       if (__indexOf.call(window, 'ontouchstart') >= 0 || (window.DocumentTouch && document instanceof DocumentTouch)) {
         return true;
       } else {

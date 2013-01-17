@@ -233,7 +233,8 @@ class Gallery
   
   has_touch: ->
     alert('ontouchstart' in window)
-    alert((window.DocumentTouch && document instanceof DocumentTouch))
+    alert(window.DocumentTouch)
+    alert(document instanceof DocumentTouch)
     if('ontouchstart' in window or (window.DocumentTouch && document instanceof DocumentTouch))
       return true
     else
