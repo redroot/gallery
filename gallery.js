@@ -88,10 +88,12 @@
       if (this.has_touch() && window.Hammer) {
         alert("YAY HAMMER" + typeof window.Hammer);
         hammer = new Hammer(this.wrapper.find(".fmg-viewport")[0]);
+        alert(this);
         hammer.onswipe = __bind(function(ev) {
           var modifier;
           modifier = ev.direction === "left" ? -1 : 1;
           alert(modifier);
+          alert(this);
           alert(this.current());
           alert("work?");
           return this.slide_to(this.current() + modifier);
